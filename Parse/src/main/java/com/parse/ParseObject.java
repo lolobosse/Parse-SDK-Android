@@ -1749,7 +1749,7 @@ public class ParseObject {
       public Task<Void> then(Task<Void> task) throws Exception {
         if (success) {
           Parse.getEventuallyQueue()
-              .notifyTestHelper(ParseCommandCache.TestHelper.OBJECT_UPDATED);
+                  .notifyTestHelper(ParseCommandCache.TestHelper.OBJECT_UPDATED);
         }
         return task;
       }
@@ -2393,8 +2393,8 @@ public class ParseObject {
   private static void collectDirtyChildren(Object node, Collection<ParseObject> dirtyChildren,
       Collection<ParseFile> dirtyFiles) {
     collectDirtyChildren(node, dirtyChildren, dirtyFiles,
-        new HashSet<ParseObject>(),
-        new HashSet<ParseObject>());
+            new HashSet<ParseObject>(),
+            new HashSet<ParseObject>());
   }
 
   /**
@@ -2781,8 +2781,8 @@ public class ParseObject {
           T newObject = resultMap.get(object.getObjectId());
           if (newObject == null) {
             throw new ParseException(
-                ParseException.OBJECT_NOT_FOUND,
-                "Object id " + object.getObjectId() + " does not exist");
+                    ParseException.OBJECT_NOT_FOUND,
+                    "Object id " + object.getObjectId() + " does not exist");
           }
           if (!Parse.isLocalDatastoreEnabled()) {
             // We only need to merge if LDS is disabled, since single instance will do the merging
@@ -2840,6 +2840,14 @@ public class ParseObject {
     synchronized (mutex) {
       return operationSetQueue.getLast();
     }
+  }
+
+  public void clearOperationSetQueue() {
+    synchronized (mutex) {
+      operationSetQueue.clear();
+      operationSetQueue.add(new ParseOperationSet());
+    }
+    rebuildEstimatedData();
   }
 
   /**
